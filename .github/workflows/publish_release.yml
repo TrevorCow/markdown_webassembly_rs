@@ -26,6 +26,12 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Download cargo packages
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: |
+          cargo install cargo-make
+          cargo install wasm-pack
+
       - name: Save Cache
         uses: actions/cache/save@v4
         with:
@@ -36,12 +42,6 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ steps.cache-cargo.outputs.cache-primary-key }}
-
-      - name: Download cargo packages
-        if: steps.cache-cargo.outputs.cache-hit != 'true'
-        run: |
-          cargo install cargo-make
-          cargo install wasm-pack
 
       - name: Build
         run: cargo make -p production
