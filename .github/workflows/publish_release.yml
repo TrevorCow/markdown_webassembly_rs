@@ -17,4 +17,4 @@ jobs:
     - name: Unzip cargo-make
       run: unzip cargo-make
     - name: Build
-      run: ./cargo-make-v0.37.16-x86_64-unknown-linux-gnu/makers -p production
+      run: ./cargo-make-v0.37.16-x86_64-unknown-linux-gnu/cargo-make make -p production
