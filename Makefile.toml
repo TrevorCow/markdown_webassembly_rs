@@ -1,0 +1,26 @@
+[tasks.build-development]
+install_crate = true
+command = "wasm-pack"
+args = [
+    "build",
+    "--target", "web",
+    "--out-dir", "test_website/lib",
+    "--dev"
+]
+
+[tasks.build-production]
+extend = "build-development"
+args = [
+    "build",
+    "--target", "web",
+    "--out-dir", "out",
+    "--release"
+] # Default to development build
+
+# Default to development build
+[tasks.build]
+clear = true
+run_task = [
+    { name = "build-production", condition = { profiles = ["production"] } },
+    { name = "build-development" },
+]

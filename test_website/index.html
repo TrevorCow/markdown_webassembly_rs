@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+    <title>Markdown Webassembly Test</title>
+    <!--
+        Linking directly to files on raw.githubusercontent.com returns a strict MIME type of `text/plain` whichs stops the simple use of
+        <link rel="stylesheet" href="//raw.githubusercontent.com/sindresorhus/github-markdown-css/main/github-markdown.css">
+        from working, this is a workaround by loading it as text and then making a new style element with that content.
+    -->
+    <script>
+        (async () => {
+            const markdown_css_text = await fetch("//raw.githubusercontent.com/sindresorhus/github-markdown-css/main/github-markdown.css").then(async fetch => await fetch.text());
+            const styleNode = document.createElement("style");
+            styleNode.innerText = markdown_css_text;
+            document.head.appendChild(styleNode);
+        })()
+    </script>
+</head>
+
+<body style="margin: 0">
+<script type="module">
+    import init, {markdown_to_html} from "./lib/markdown_webassembly.js"
+
+    function add_markdown_to_dom(markdown) {
+        const output = markdown_to_html(markdown);
+
+        const articleElem = document.createElement("article");
+        articleElem.className = "markdown-body"
+        document.body.appendChild(articleElem);
+        articleElem.innerHTML = output;
+    }
+
+    function add_header_to_dom(header_text) {
+        const h1Elem = document.createElement("h1");
+        document.body.appendChild(h1Elem);
+        h1Elem.innerText = header_text;
+    }
+
+    (async () => {
+        await init();
+
+        const meta_readme_markdown = await fetch("../README.md").then(async fetch => await fetch.text());
+        add_header_to_dom("README.md:")
+        add_markdown_to_dom(meta_readme_markdown)
+
+        add_header_to_dom("Test.md:")
+        const test_markdown = await fetch("./Test.md").then(async fetch => await fetch.text());
+        add_markdown_to_dom(test_markdown)
+
+    })();
+
+</script>
+</body>
+</html>
