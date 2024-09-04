@@ -11,33 +11,49 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Cache cargo packages
-      id: cache-cargo
-      uses: actions/cache@v4
-      with:
-        path: ~/.cargo
-        key: ${{ runner.os }}-cargo
+      - name: Cache cargo packages
+        id: cache-cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+      - name: Save Cache
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ steps.cache-cargo.outputs.cache-primary-key }}
 
-    - name: Download cargo packages
-      if: steps.cache-cargo.outputs.cache-hit != 'true'
-      run: |
-        cargo install cargo-make
-        cargo install wasm-pack
+      - name: Download cargo packages
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        run: |
+          cargo install cargo-make
+          cargo install wasm-pack
 
-    - name: Build
-      run: cargo make -p production
+      - name: Build
+        run: cargo make -p production
 
-    - name: Create Release
-      id: create_release
-      uses: ncipollo/release-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        artifacts: 'out/markdown_webassembly_rs.*'
-        commit: ${{ github.ref }}
-        draft: true
-        generateReleaseNotes: true
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          artifacts: 'out/markdown_webassembly_rs.*'
+          commit: ${{ github.ref }}
+          tag: ${{ github.ref }}
+          draft: true
+          generateReleaseNotes: true
