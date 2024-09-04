@@ -40,11 +40,16 @@ jobs:
       - name: Build
         run: cargo make -p production
 
+      - name: Make Artifact
+        run: |
+          cd pkg/
+          tar -czf markdown_webassembly_rs.tgz *
+
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          artifacts: 'out/markdown_webassembly_rs*'
+          artifacts: 'markdown_webassembly_rs.tgz'
           generateReleaseNotes: true
