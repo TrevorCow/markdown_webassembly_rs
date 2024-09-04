@@ -1,5 +1,5 @@
 [tasks.build-development]
-install_crate = true
+install_crate = "wasm-pack"
 command = "wasm-pack"
 args = [
     "build",

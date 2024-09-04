@@ -12,7 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Install Cargo-Make
-      run: cargo install --force cargo-make
+    - name: Download cargo-make
+      run: wget https://github.com/sagiegurari/cargo-make/releases/download/0.37.16/cargo-make-v0.37.16-x86_64-unknown-linux-gnu.zip -O cargo-make
+    - name: Unzip cargo-make
+      run: unzip cargo-make
     - name: Build
-      run: cargo make -p production
+      run: ./cargo-make/makers -p production
