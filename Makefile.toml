@@ -1,4 +1,5 @@
 [tasks.build-development]
+install_crate = { crate_name = "wasm-pack", binary = "wasm-pack", test_arg = ["wasm-pack", "-V"] }
 command = "wasm-pack"
 args = [
     "build",
