@@ -13,7 +13,6 @@ extend = "build-development"
 args = [
     "build",
     "--target", "web",
-    "--out-dir", "out",
     "--release"
 ] # Default to development build
 
