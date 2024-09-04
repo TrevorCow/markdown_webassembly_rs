@@ -1,7 +1,9 @@
 name: Publish Release
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
 
 env:
   CARGO_TERM_COLOR: always
@@ -35,17 +37,6 @@ jobs:
           cargo install cargo-make
           cargo install wasm-pack
 
-      - name: Save Cache
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ steps.cache-cargo.outputs.cache-primary-key }}
-
       - name: Build
         run: cargo make -p production
 
@@ -55,8 +46,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          artifacts: 'out/markdown_webassembly_rs.*'
-          commit: ${{ github.ref }}
-          tag: ${{ github.ref }}
-          draft: true
+          artifacts: 'out/markdown_webassembly_rs*'
           generateReleaseNotes: true
