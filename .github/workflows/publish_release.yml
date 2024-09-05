@@ -41,9 +41,7 @@ jobs:
         run: cargo make -p production
 
       - name: Make Artifact
-        run: |
-          cd pkg/
-          tar -czf markdown_webassembly_rs.tgz *
+        run: tar -czf markdown_webassembly_rs.tgz pkg/
 
       - name: Create Release
         id: create_release

@@ -14,11 +14,12 @@
             document.head.appendChild(styleNode);
         })()
     </script>
+    <link rel="stylesheet" href="css/synhtml-css-classes.css">
 </head>
 
 <body style="margin: 0">
 <script type="module">
-    import init, {markdown_to_html} from "./lib/markdown_webassembly.js"
+    import init, {markdown_to_html} from "./lib/markdown_webassembly_rs.js"
 
     function add_markdown_to_dom(markdown) {
         const output = markdown_to_html(markdown);

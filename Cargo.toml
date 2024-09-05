@@ -7,6 +7,9 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-comrak = "0.27.0"
+comrak = { version = "0.28.0", features = ["syntect"] }
 wasm-bindgen = "0.2.93"
 console_error_panic_hook = "0.1.7"
+
+[build-dependencies]
+syntect = "5.2.0"

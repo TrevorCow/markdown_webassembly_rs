@@ -1,20 +1,26 @@
+[env]
+TARGET_TYPE = "bundler"
+RELEASE_TYPE = "dev"
+
 [tasks.build-development]
 install_crate = { crate_name = "wasm-pack", binary = "wasm-pack", test_arg = ["-V"] }
+env = { TARGET_TYPE = "web" }
 command = "wasm-pack"
 args = [
     "build",
-    "--target", "web",
+    "--target", "${TARGET_TYPE}",
     "--out-dir", "test_website/lib",
-    "--dev"
+    "--${RELEASE_TYPE}"
 ]
 
 [tasks.build-production]
 extend = "build-development"
+env = { RELEASE_TYPE = "release" }
 args = [
     "build",
-    "--target", "web",
-    "--release"
-] # Default to development build
+    "--target", "${TARGET_TYPE}",
+    "--${RELEASE_TYPE}"
+]
 
 # Default to development build
 [tasks.build]
